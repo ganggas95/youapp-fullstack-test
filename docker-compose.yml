@@ -1,0 +1,63 @@
+version: "3.1"
+
+services:
+  cache:
+    container_name: cache
+    build:
+      context: ./backend/redis
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "6376:6379"
+    volumes:
+      - ./backend/redis_data:/data
+    networks:
+      - youapp-network
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - .env-mongodb
+    ports:
+      - 27017:27017
+    networks:
+      - youapp-network
+    volumes:
+      - ./backend/mongo_data:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - .env-mongodb-express
+    networks:
+      - youapp-network
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+      - cache
+    ports:
+      - 3100:3100
+      - 8888:8888
+      - 8889:8889
+    env_file:
+      - ./backend/.env
+    links:
+      - mongo
+      - cache
+    command: ["yarn", "start:dev"]
+    networks:
+      - youapp-network
+    volumes:
+      - ./backend:/backend
+      - /backend/node_modules
+networks:
+  youapp-network:
+    driver: bridge
+    external: true
