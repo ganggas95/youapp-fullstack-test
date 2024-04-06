@@ -10,6 +10,7 @@ async function ProfileIndexPage() {
   if (!token) redirect('/login');
   try {
     const profile = await getProfileFromServer();
+    console.log(profile)
     if (!profile || !token) {
       redirect('/login');
     }

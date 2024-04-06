@@ -4,8 +4,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { Types } from 'mongoose';
 
-
-
 import { UserDocument } from '@/api/user/schemes/user.scheme';
 import { UserService } from '@/api/user/user.service';
 import { customValidationPipe } from '@/pipe/validator.pipe';

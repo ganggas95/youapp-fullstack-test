@@ -45,19 +45,19 @@ export class ProfileService {
             HttpStatus.NOT_FOUND,
             null,
             'Profile not found');
-        user.name = profileDto.name;
-        user.gender = profileDto.gender;
-        user.avatar = profileDto.avatar;
-        user.birthday = profileDto.birthday;
+        user.name = profileDto.name || user.name;
+        user.gender = profileDto.gender || user.gender;
+        user.avatar = profileDto.avatar || user.avatar;
+        user.birthday = profileDto.birthday || user.birthday;
 
         // Update horoscope and zodiac if birthday is provided
         if (profileDto.birthday) {
             user.horoscope = detectZodiac(profileDto.birthday);
             user.zodiac = detectChineseZodiac(profileDto.birthday);
         }
-        user.interests = profileDto.interests;
-        user.weight = profileDto.weight;
-        user.height = profileDto.height;
+        user.interests = profileDto.interests || user.interests;
+        user.weight = profileDto.weight || user.weight;
+        user.height = profileDto.height || user.height;
         return await this.userService.saveUser(user)
     }
 
